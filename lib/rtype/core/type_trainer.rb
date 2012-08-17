@@ -62,7 +62,7 @@ class TypeTrainer
   end
   
   def get_next_word_length()
-      return @word_size_max + Random.rand(@word_size_max / 2)
+      return @word_size_max - Random.rand(@word_size_max / 2)
   end
     
   def get_next_key(keys)
