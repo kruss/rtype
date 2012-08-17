@@ -2,7 +2,7 @@ require_relative "key_set"
 
 class TypeTrainer
   
-  def initialize(line_size_max = 20, word_size_max = 8)
+  def initialize(line_size_max = 80, word_size_max = 8)
     @key_set = KeySet.new()
     @line_size_max = line_size_max
     @word_size_max = word_size_max
