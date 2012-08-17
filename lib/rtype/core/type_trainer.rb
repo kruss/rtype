@@ -23,16 +23,15 @@ class TypeTrainer
 :private
   
   def show_menu()
-    puts "$ #{@key_set.info()} OK? [yes] / (u)p / (d)own / (q)uit"
-    print "$ "
+    print "? #{@key_set.info()} [ <OK> / (u)p / (d)own / (q)uit ] : "
     input = gets.chop
-    if input.size == 0 || input.eql?("y") || input.eql?("yes") then
+    if input.size == 0 then
       @training = true
-    elsif input.eql?("u") || input.eql?("up") then
+    elsif input.eql?("u") then
       @key_set.level_up()
-    elsif input.eql?("d") || input.eql?("down") then
+    elsif input.eql?("d") then
       @key_set.level_down()
-    elsif input.eql?("q") || input.eql?("quit") then
+    elsif input.eql?("q") then
       @running = false
     end
   end
@@ -54,7 +53,7 @@ class TypeTrainer
         if typed.eql?(output) then
           seconds = Time.new.to_i - start.to_i
           ratio = typed.size.to_f / seconds.to_f * 60
-          puts "$ done (#{ratio.to_i} hit/min)"
+          puts "! done (#{ratio.to_i} hit/min)"
           output = nil
           typed = nil 
         end
