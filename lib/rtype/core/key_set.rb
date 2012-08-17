@@ -19,8 +19,8 @@ class KeySet
     @set = get_keys()
   end
   
-  def get_info()
-    return "level #{@level + 1} (#{@set.size} keys)"
+  def info()
+    return "Level #{@level + 1} (#{@set.size} Keys)"
   end
   
   def level_up()

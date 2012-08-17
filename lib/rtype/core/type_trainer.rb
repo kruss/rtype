@@ -2,7 +2,7 @@ require_relative "key_set"
 
 class TypeTrainer
   
-  def initialize(line_size_max = 80, word_size_max = 8)
+  def initialize(line_size_max = 20, word_size_max = 8)
     @key_set = KeySet.new()
     @line_size_max = line_size_max
     @word_size_max = word_size_max
@@ -23,7 +23,7 @@ class TypeTrainer
 :private
   
   def show_menu()
-    puts "$ #{@key_set.get_info()} OK? [yes] / (u)p / (d)own / (q)uit"
+    puts "$ #{@key_set.info()} OK? [yes] / (u)p / (d)own / (q)uit"
     print "$ "
     input = gets.chop
     if input.size == 0 || input.eql?("y") || input.eql?("yes") then
@@ -39,21 +39,24 @@ class TypeTrainer
   
   def do_training()
     output = nil
-    part = nil
+    typed = nil
     while @training do
       if output == nil then
         output = get_line()
+        start = Time.new
       end      
       puts  "> #{output}"
-      print "< #{part != nil ? part : ""}"
+      print "< #{typed != nil ? typed : ""}"
       input = gets.chop
       if input.size > 0 then
-        input = part != nil ? part + input : input
-        if input.eql?(output) then
+        input = typed != nil ? typed + input : input
+        typed = get_match(output, input)
+        if typed.eql?(output) then
+          seconds = Time.new.to_i - start.to_i
+          ratio = typed.size.to_f / seconds.to_f * 60
+          puts "$ done (#{ratio.to_i} hit/min)"
           output = nil
-          part = nil
-        else
-          part = get_match(output, input)
+          typed = nil 
         end
       else
         @training = false
@@ -76,16 +79,16 @@ class TypeTrainer
     return line.strip
   end
   
-  def get_match(string_1, string_2)
-    part = ""
-    for i in 0..string_2.size do
-      if i < string_1.size && string_1[i] == string_2[i] then
-        part << string_2[i]
+  def get_match(from, to)
+    match = ""
+    for i in 0..from.size do
+      if i < to.size && from[i] == to[i] then
+        match << from[i]
       else
         break
       end
     end
-    return part.size > 0 ? part : nil
+    return match
   end
   
 end
