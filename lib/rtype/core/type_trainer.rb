@@ -2,15 +2,15 @@ require_relative "key_set"
 
 class TypeTrainer
   
-  def initialize(line_size_max = 80, word_size_max = 8)
-    @key_set = KeySet.new()
+  def initialize(key_set_level, line_size_max, word_size_max)
+    @key_set = KeySet.new(key_set_level)
     @line_size_max = line_size_max
     @word_size_max = word_size_max
+    @running = true
+    @training = true
   end
   
   def run()
-    @running = true
-    @training = false
     while @running do
       if @training then
         do_training()
@@ -23,7 +23,8 @@ class TypeTrainer
 :private
   
   def show_menu()
-    print "? #{@key_set.info()} [ <OK> / (u)p / (d)own / (q)uit ] : "
+    info = "Level #{@key_set.get_level() + 1} (#{@key_set.get_size()} Keys)"
+    print "$ #{info} [ <OK> / (u)p / (d)own / (q)uit ] : "
     input = gets.chop
     if input.size == 0 then
       @training = true
@@ -53,7 +54,7 @@ class TypeTrainer
         if typed.eql?(output) then
           seconds = Time.new.to_i - start.to_i
           ratio = typed.size.to_f / seconds.to_f * 60
-          puts "! done (#{ratio.to_i} hit/min)"
+          puts "$ #{ratio.to_i} hits/min"
           output = nil
           typed = nil 
         end
@@ -65,15 +66,15 @@ class TypeTrainer
 
   def get_line()
     line =  ""
-    word_length = 0
+    size = 0
     while line.size < @line_size_max do
-      if word_length == 0 then
+      if size == 0 then
         line << " "
-        word_length = @word_size_max - Random.rand(@word_size_max / 2)
+        size = @word_size_max >= 2 ? @word_size_max - Random.rand(@word_size_max / 2) : @word_size_max
         next
       end
       line << @key_set.get_key()
-      word_length = word_length - 1
+      size = size - 1
     end
     return line.strip
   end
