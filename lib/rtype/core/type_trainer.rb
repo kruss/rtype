@@ -45,8 +45,8 @@ class TypeTrainer
         output = get_line()
         start = Time.new
       end      
-      puts  "> #{output}"
-      print "< #{typed != nil ? typed : ""}"
+      puts  "> #{output}"     
+      print typed != nil ? "! #{typed}" : "< "
       input = gets.chop
       if input.size > 0 then
         input = typed != nil ? typed + input : input
